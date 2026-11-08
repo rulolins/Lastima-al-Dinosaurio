@@ -253,12 +253,13 @@ function buildSVG(){
    ${sk('ellipse','cx="300" cy="284" rx="64" ry="40"','url(#gSkinL)')}
    <ellipse class="nostril" cx="281" cy="272" rx="4.5" ry="3.2" fill="#6a1a05"/><ellipse class="nostril" cx="319" cy="272" rx="4.5" ry="3.2" fill="#6a1a05"/>
    <g id="cheeks"><circle cx="214" cy="270" r="15" fill="#ff5a5a" opacity=".38" filter="url(#blur3)"/><circle cx="386" cy="270" r="15" fill="#ff5a5a" opacity=".38" filter="url(#blur3)"/></g>
+</g><g class="dmg" clip-path="url(#clip-head)">${overlays('head',DEF.head.c)}</g><g class="shape">
    <path id="mouthFill" d="" fill="#5a1008" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round" opacity="0"/>
    <g id="teeth"></g>
    <path id="mouthLine" d="" fill="none" stroke="${OUT}" stroke-width="4.5" stroke-linecap="round"/>
    ${eye()}${mirror(eye())}
    <g class="steam" id="steam"><circle cx="280" cy="262" r="9" fill="#fff"/><circle cx="320" cy="262" r="9" fill="#fff"/><circle cx="276" cy="262" r="7" fill="#fff"/><circle cx="324" cy="262" r="7" fill="#fff"/></g>
-  </g><g class="dmg" clip-path="url(#clip-head)">${overlays('head',DEF.head.c)}</g></g>`;
+  </g></g>`;
 
  const wings=sidePart('wing','L')+sidePart('wing','R');
  const legs=sidePart('leg','L')+sidePart('leg','R');
@@ -297,7 +298,7 @@ const anger=()=>Math.pow(clamp(state.total/220),.8);
 function updatePart(k){
  const el=$(`[data-part="${k}"]`);if(!el)return;
  const L=lvl(state.parts[k]);
- $$(`[data-part="${k}"] [data-min]`).forEach(n=>n.style.opacity=L>=+n.dataset.min?1:0);
+ $$(`[data-part="${k}"] [data-min]`).forEach(n=>n.style.opacity=L>=+n.dataset.min?(n.getAttribute('opacity')||1):0);
 }
 function updateFace(){
  const A=anger();
@@ -328,7 +329,7 @@ function updateFace(){
  $('#flameGlow').setAttribute('fill',mix('#ff7a1a','#ff2a0a',A));
  // músculo
  for(const k2 of KEYS){const base=k2.replace(/[LR]$/,'');const s=(base==='wing'?.12:base==='head'?.04:.08)*A;
-  const sh=$(`[data-part="${k2}"] > .shape`);if(sh)sh.style.transform=`scale(${1+s})`}
+  $$(`[data-part="${k2}"] > .shape`).forEach(sh=>sh.style.transform=`scale(${1+s})`)}
  const sh=$$('[data-part="torso"] > .shape');sh.forEach(e=>e.style.transform=`scale(${1+.07*A})`);
 }
 const SAY=[
