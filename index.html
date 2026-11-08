@@ -47,16 +47,16 @@ main{position:relative;min-width:0;min-height:0}
 .dmg [data-min]{opacity:0;transition:opacity .45s}
 #dino{transform-origin:300px 660px;animation:breathe 3.4s ease-in-out infinite}
 @keyframes breathe{50%{transform:scale(1.008,1.018) translateY(-2px)}}
-.tailsway{transform-origin:392px 510px;animation:sway 3.6s ease-in-out infinite}
+.tailsway{transform-origin:368px 552px;animation:sway 3.6s ease-in-out infinite}
 @keyframes sway{50%{transform:rotate(3.5deg)}}
-.flame{transform-origin:476px 640px;animation:flick .45s ease-in-out infinite alternate}
+.flame{transform-origin:548px 636px;animation:flick .45s ease-in-out infinite alternate}
 @keyframes flick{0%{transform:scale(1,1) skewX(-2deg)}100%{transform:scale(.94,1.12) skewX(3deg)}}
 .eyeball{transform-box:fill-box;transform-origin:center;animation:blink 5.2s infinite}
 @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
 .steam circle{animation:rise 1.6s ease-out infinite;transform-box:fill-box;transform-origin:center}
 .steam circle:nth-child(2){animation-delay:.5s}.steam circle:nth-child(3){animation-delay:.9s}.steam circle:nth-child(4){animation-delay:1.2s}
 @keyframes rise{0%{transform:translateY(0) scale(.4);opacity:.8}100%{transform:translateY(-46px) scale(1.7);opacity:0}}
-.spikes{transform-origin:300px 150px;transition:transform .8s cubic-bezier(.3,1.6,.4,1),opacity .6s}
+.spikes{transform-origin:300px 120px;transition:transform .8s cubic-bezier(.3,1.6,.4,1),opacity .6s}
 #hud{position:absolute;top:10px;left:0;right:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;gap:2px}
 #total{font-size:44px;font-weight:800;line-height:1;text-shadow:0 3px 0 #7d2209,0 0 24px rgba(255,120,30,.6)}
 #total small{display:block;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.7;text-shadow:none;text-align:center}
@@ -195,28 +195,42 @@ const THRESH = [3,10,22,40,70];
 const lvl = n => THRESH.filter(t=>n>=t).length;
 
 const G = {
- wing:'M222 372 C178 340 120 292 62 224 C52 262 66 290 88 306 C74 318 80 338 100 346 C98 362 116 372 134 374 C152 392 190 402 226 406Z',
- tail:'M385 470 C462 468 532 520 522 598 C518 626 492 640 470 630 C490 604 482 566 442 546 C418 534 398 542 386 548Z'
+ wing:'M236 372 C196 330 120 250 74 196 C52 222 36 254 30 282 Q70 300 56 340 Q100 338 112 384 Q176 384 230 432Z',
+ tail:'M366 512 C430 516 492 552 514 602 C522 624 540 632 556 622 C548 650 508 654 488 624 C466 586 420 580 368 592Z',
+ head:'M182 212 C180 150 230 110 300 110 C370 110 420 150 418 212 C418 262 380 304 300 306 C220 304 182 262 182 212Z',
+ torso:'M232 298 C220 350 208 420 210 480 C212 545 246 592 300 592 C354 592 388 545 390 480 C392 420 380 350 368 298 C340 288 260 288 232 298Z',
+ belly:'M256 296 C242 380 236 470 248 532 C260 574 284 586 300 586 C316 586 340 574 352 532 C364 470 358 380 344 296Z'
 };
-const sk=(tag,a,fill='url(#gSkin)')=>`<${tag} ${a} fill="${fill}" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/><${tag} ${a} fill="url(#pTex)" opacity=".75"/><${tag} ${a} fill="url(#gShade)"/>`;
-const claw=d=>`<path d="${d}" fill="#fff6dc" stroke="${OUT}" stroke-width="2.5" stroke-linejoin="round"/>`;
+const sk=(tag,a,fill='url(#gSkin)')=>`<${tag} ${a} fill="${fill}" stroke="${OUT}" stroke-width="3.6" stroke-linejoin="round"/><${tag} ${a} fill="url(#pTex)" opacity=".5"/><${tag} ${a} fill="url(#gShade)"/>`;
+const claw=d=>`<path d="${d}" fill="#f3e6c8" stroke="${OUT}" stroke-width="2.5" stroke-linejoin="round"/>`;
 
 const DEF = {
- wing:{tag:'path',a:`d="${G.wing}"`,c:[130,330,55],draw(){return `
-   <path d="${G.wing}" fill="url(#gWing)" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
-   <path d="${G.wing}" fill="url(#pTex)" opacity=".5"/>
-   <path d="M66 228 Q96 300 90 308 M90 308 Q104 350 102 348 M150 310 Q140 345 150 372" stroke="#5a1304" stroke-width="2" fill="none" opacity=".45"/>
-   <path d="M180 345 Q150 330 120 290 M200 380 Q160 366 128 340" stroke="#ffb27a" stroke-width="2.5" fill="none" opacity=".35" stroke-linecap="round"/>
-   <path d="M222 385 L66 228 M222 392 L90 308 M222 398 L102 348" stroke="${OUT}" stroke-width="11" stroke-linecap="round" fill="none"/>
-   <path d="M222 385 L66 228 M222 392 L90 308 M222 398 L102 348" stroke="#f26a24" stroke-width="6" stroke-linecap="round" fill="none"/>
-   <path d="M222 385 L66 228" stroke="#ffc07a" stroke-width="2" stroke-linecap="round" fill="none" opacity=".7"/>
-   <circle cx="64" cy="226" r="8" fill="#fff3d6" stroke="${OUT}" stroke-width="3"/>`}},
- arm:{tag:'ellipse',a:'cx="202" cy="422" rx="24" ry="48" transform="rotate(32 202 422)"',c:[202,422,32],draw(){return sk('ellipse','cx="202" cy="422" rx="24" ry="48" transform="rotate(32 202 422)"')}},
- hand:{tag:'circle',a:'cx="172" cy="470" r="25"',c:[172,470,22],draw(){return claw('M153 487 L156 507 L166 490Z')+claw('M165 492 L172 512 L181 493Z')+claw('M178 490 L188 508 L193 486Z')+sk('circle','cx="156" cy="486" r="9"')+sk('circle','cx="172" cy="491" r="9"')+sk('circle','cx="188" cy="486" r="9"')+sk('circle','cx="172" cy="470" r="25"')+'<ellipse cx="164" cy="460" rx="8" ry="5" fill="#fff" opacity=".22"/>'}},
- leg:{tag:'ellipse',a:'cx="245" cy="525" rx="56" ry="70"',c:[245,525,45],draw(){return sk('ellipse','cx="245" cy="525" rx="56" ry="70"')+`<ellipse cx="232" cy="500" rx="14" ry="22" fill="#fff" opacity=".13"/>`}},
- foot:{tag:'ellipse',a:'cx="228" cy="614" rx="54" ry="26"',c:[228,614,36],draw(){return claw('M190 628 L193 647 L205 632Z')+claw('M216 636 L225 655 L235 637Z')+claw('M244 632 L257 649 L263 628Z')+sk('ellipse','cx="228" cy="614" rx="54" ry="26"')}},
- head:{tag:'ellipse',a:'cx="300" cy="235" rx="124" ry="106"',c:[300,235,88]},
- torso:{tag:'ellipse',a:'cx="300" cy="430" rx="108" ry="128"',c:[300,430,85]}
+ wing:{tag:'path',a:`d="${G.wing}"`,c:[120,320,70],draw(){
+   const fing=`M74 196 Q48 240 30 282 M74 196 Q60 270 56 340 M74 196 Q96 290 112 384`;
+   return `
+   <path d="${G.wing}" fill="url(#gWing)" stroke="${OUT}" stroke-width="3.6" stroke-linejoin="round"/>
+   <path d="${G.wing}" fill="url(#pTex)" opacity=".3"/>
+   <path d="M150 300 Q110 312 70 300 M170 350 Q130 360 92 350 M200 392 Q160 396 130 390" stroke="#ffd38a" stroke-width="2.2" fill="none" opacity=".28" stroke-linecap="round"/>
+   <path d="${fing}" stroke="${OUT}" stroke-width="8" stroke-linecap="round" fill="none"/>
+   <path d="${fing}" stroke="#e8602a" stroke-width="4.4" stroke-linecap="round" fill="none"/>
+   <path d="M236 374 C196 332 120 252 74 198" stroke="${OUT}" stroke-width="14" stroke-linecap="round" fill="none"/>
+   <path d="M236 374 C196 332 120 252 74 198" stroke="#ee6a2c" stroke-width="9" stroke-linecap="round" fill="none"/>
+   <path d="M232 366 C194 328 124 254 82 206" stroke="#ffc58a" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".7"/>
+   <circle cx="72" cy="194" r="13" fill="url(#gSkin)" stroke="${OUT}" stroke-width="3.4"/>
+   <path d="M62 184 Q52 170 56 160 Q68 168 76 182Z" fill="#f3e6c8" stroke="${OUT}" stroke-width="2.4" stroke-linejoin="round"/>
+   <ellipse cx="68" cy="190" rx="5" ry="3.4" fill="#fff" opacity=".35"/>`}},
+ arm:{tag:'ellipse',a:'cx="220" cy="408" rx="20" ry="52" transform="rotate(26 220 408)"',c:[216,410,36],draw(){
+   return sk('ellipse','cx="220" cy="408" rx="20" ry="52" transform="rotate(26 220 408)"')+
+   `<path d="M226 372 Q212 392 206 420" stroke="#fff" stroke-width="3" fill="none" opacity=".16" stroke-linecap="round"/><path d="M208 430 Q214 436 224 432" stroke="#8a2d0c" stroke-width="2" fill="none" opacity=".45"/>`}},
+ hand:{tag:'circle',a:'cx="190" cy="468" r="22"',c:[190,468,22],draw(){
+   return claw('M170 482 Q164 500 168 508 Q178 498 182 488Z')+claw('M186 488 Q184 508 190 516 Q198 504 198 490Z')+claw('M204 484 Q208 502 216 508 Q218 494 212 480Z')+
+   sk('circle','cx="174" cy="482" r="8.5"')+sk('circle','cx="190" cy="488" r="8.5"')+sk('circle','cx="205" cy="482" r="8.5"')+sk('circle','cx="190" cy="468" r="22"')+'<ellipse cx="183" cy="459" rx="7" ry="4.5" fill="#fff" opacity=".24"/>'}},
+ leg:{tag:'ellipse',a:'cx="244" cy="538" rx="52" ry="62"',c:[244,538,44],draw(){return sk('ellipse','cx="244" cy="538" rx="52" ry="62"')+`<ellipse cx="230" cy="512" rx="15" ry="24" fill="#fff" opacity=".13"/><path d="M214 556 Q232 570 262 562" stroke="#8a2d0c" stroke-width="2.2" fill="none" opacity=".35" stroke-linecap="round"/>`}},
+ foot:{tag:'ellipse',a:'cx="228" cy="624" rx="58" ry="26"',c:[228,624,36],draw(){
+   return claw('M182 640 Q178 656 184 664 Q192 654 194 642Z')+claw('M214 648 Q212 666 220 672 Q228 660 226 648Z')+claw('M248 642 Q252 660 260 664 Q262 652 258 638Z')+
+   sk('ellipse','cx="228" cy="624" rx="58" ry="26"')+sk('circle','cx="190" cy="640" r="12"')+sk('circle','cx="222" cy="646" r="12"')+sk('circle','cx="255" cy="640" r="12"')+`<ellipse cx="214" cy="614" rx="20" ry="6" fill="#fff" opacity=".16"/>`}},
+ head:{tag:'path',a:`d="${G.head}"`,c:[300,212,92]},
+ torso:{tag:'path',a:`d="${G.torso}"`,c:[300,450,88]}
 };
 
 /* ---------- Overlays de daño por parte ---------- */
@@ -242,12 +256,14 @@ function overlays(name,c){
 
 /* ---------- Construcción del SVG ---------- */
 function eye(){return `<g class="eye"><g class="eyeball">
- <ellipse class="sclera" cx="252" cy="228" rx="27" ry="31" fill="#fff" stroke="${OUT}" stroke-width="3.5"/>
+ <ellipse cx="246" cy="205" rx="32" ry="36" fill="#f27c36" stroke="${OUT}" stroke-width="3.4"/>
+ <ellipse class="sclera" cx="246" cy="205" rx="28" ry="32" fill="#1c0b06" stroke="${OUT}" stroke-width="2.6"/>
  <g clip-path="url(#eyeClip)">
-  <circle class="iris" cx="257" cy="234" r="19" fill="#2aa6c9"/><circle cx="257" cy="234" r="19" fill="url(#gIris)"/>
-  <ellipse class="pupil" cx="257" cy="234" rx="9" ry="10" fill="#10161c"/>
-  <circle class="hl" cx="249" cy="223" r="6.5" fill="#fff"/><circle class="hl" cx="264" cy="242" r="3" fill="#fff"/>
-  <polygon class="lid" points="215,180 295,180 295,180 215,180" fill="#f78f33" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
+  <circle class="iris" cx="248" cy="209" r="25" fill="#8a4a1a"/><circle cx="248" cy="209" r="25" fill="url(#gIris)"/>
+  <ellipse class="pupil" cx="248" cy="209" rx="11" ry="12" fill="#07030a"/>
+  <path d="M226 226 Q248 242 270 226" stroke="#ffcf8a" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>
+  <ellipse class="hl" cx="238" cy="194" rx="9" ry="10.5" fill="#fff"/><circle class="hl" cx="258" cy="222" r="4.4" fill="#fff"/><circle class="hl" cx="262" cy="196" r="2.2" fill="#fff"/>
+  <polygon class="lid" points="210,165 296,165 296,165 210,165" fill="#f27c36" stroke="${OUT}" stroke-width="4" stroke-linejoin="round"/>
  </g></g>
  <path class="brow" d="" stroke="${OUT}" fill="none" stroke-linecap="round" opacity="0"/></g>`}
 
@@ -261,48 +277,59 @@ function sidePart(base,side){
 function buildSVG(){
  const clips=Object.entries(DEF).map(([k,d])=>`<clipPath id="clip-${k}"><${d.tag} ${d.a}/></clipPath>`).join('');
  const defs=`<defs>
-  <radialGradient id="gSkin" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffb457"/><stop offset=".55" stop-color="#f5802c"/><stop offset="1" stop-color="#d9501a"/></radialGradient>
-  <radialGradient id="gSkinL" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#ffc474"/><stop offset="1" stop-color="#f58a30"/></radialGradient>
-  <radialGradient id="gBelly" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#fff0bf"/><stop offset="1" stop-color="#f2c06e"/></radialGradient>
+  <radialGradient id="gSkin" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffa45e"/><stop offset=".5" stop-color="#f26f30"/><stop offset="1" stop-color="#c8441a"/></radialGradient>
+  <radialGradient id="gSkinL" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#ffbb7c"/><stop offset="1" stop-color="#f4802f"/></radialGradient>
+  <radialGradient id="gBelly" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#fff0c4"/><stop offset="1" stop-color="#efc27c"/></radialGradient>
   <linearGradient id="gShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#5a1000" stop-opacity=".38"/></linearGradient>
-  <linearGradient id="gWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a3a"/><stop offset="1" stop-color="#8f1f3a"/></linearGradient>
+  <linearGradient id="gWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffa24a"/><stop offset=".55" stop-color="#ee6a2a"/><stop offset="1" stop-color="#b33a28"/></linearGradient><linearGradient id="gHorn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb06a"/><stop offset="1" stop-color="#c8441a"/></linearGradient>
   <linearGradient id="gSpike" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a0"/><stop offset="1" stop-color="#c9441a"/></linearGradient>
-  <radialGradient id="gIris" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
+  <radialGradient id="gIris" cx=".45" cy=".35" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".6" stop-color="#000" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity=".8"/></radialGradient>
   <radialGradient id="gBruise"><stop offset="0" stop-color="#5b2a7a" stop-opacity=".9"/><stop offset=".6" stop-color="#7a3a6a" stop-opacity=".5"/><stop offset="1" stop-color="#7a3a6a" stop-opacity="0"/></radialGradient>
   <radialGradient id="gGround"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
   <filter id="blur3"><feGaussianBlur stdDeviation="3"/></filter><filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
   <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
   <pattern id="pTex" width="160" height="160" patternUnits="userSpaceOnUse"><image id="texImg" width="160" height="160"/></pattern>
-  <clipPath id="eyeClip"><ellipse cx="252" cy="228" rx="27" ry="31"/></clipPath>${clips}</defs>`;
+  <clipPath id="eyeClip"><ellipse cx="246" cy="205" rx="28" ry="32"/></clipPath><clipPath id="clip-belly"><path d="${G.belly}"/></clipPath><clipPath id="mouthClip"><path id="mouthClipP" d=""/></clipPath>${clips}</defs>`;
 
- const flame=`<g class="flame"><g id="flameScale" style="transform-origin:476px 640px">
-  <ellipse cx="476" cy="600" rx="44" ry="56" fill="#ff7a1a" opacity=".35" filter="url(#glow)" id="flameGlow"/>
-  <path id="flameOut" d="M476 644 C440 622 450 584 474 552 C480 580 506 588 500 620 C497 636 486 646 476 644Z" fill="#ff8a1f" stroke="#a62a08" stroke-width="3" stroke-linejoin="round"/>
-  <path id="flameIn" d="M476 640 C460 626 466 606 477 590 C483 606 495 612 491 627 C489 636 481 642 476 640Z" fill="#ffe066"/></g></g>`;
+ const flame=`<g class="flame"><g id="flameScale" style="transform-origin:548px 636px">
+  <ellipse cx="548" cy="596" rx="46" ry="58" fill="#ff7a1a" opacity=".38" filter="url(#glow)" id="flameGlow"/>
+  <path id="flameOut" d="M548 640 C510 618 520 578 546 542 C553 572 580 580 574 612 C571 630 558 642 548 640Z" fill="#ff8a1f" stroke="#a62a08" stroke-width="3" stroke-linejoin="round"/>
+  <path id="flameIn" d="M548 636 C531 622 537 600 549 582 C556 600 568 606 564 621 C562 631 554 638 548 636Z" fill="#ffe066"/></g></g>`;
 
  const tail=`<g class="part" data-part="torso"><g class="shape"><g class="tailsway">${sk('path',`d="${G.tail}"`)}
-   <path d="M410 520 Q450 530 480 590 M425 540 Q455 548 470 590" stroke="#ffc480" stroke-width="2" fill="none" opacity=".5"/></g></g></g>`;
+   <path d="M392 524 Q450 532 500 590 M392 548 Q440 556 478 596" stroke="#ffc480" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+   <path d="M398 590 Q440 590 470 616" stroke="#7a2208" stroke-width="2" fill="none" opacity=".25"/>${flame}</g></g></g>`;
 
- const belly=`<ellipse cx="300" cy="445" rx="72" ry="106" fill="url(#gBelly)" stroke="#c98a3c" stroke-width="3"/>
-  <ellipse cx="300" cy="445" rx="72" ry="106" fill="url(#pTex)" opacity=".28"/>
-  ${[392,426,460,494,528].map(y=>`<path d="M236 ${y} Q300 ${y+18} 364 ${y}" stroke="#d29a4c" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join('')}`;
- const torso=`<g class="part" data-part="torso"><g class="shape">${sk('ellipse',DEF.torso.a)}${belly}</g>
+ const belly=`<path d="${G.belly}" fill="url(#gBelly)" stroke="#c98a3c" stroke-width="2.6"/>
+  <path d="${G.belly}" fill="url(#pTex)" opacity=".18"/>
+  <g clip-path="url(#clip-belly)">${[330,368,406,444,482,520,552].map((y,i)=>`<path d="M236 ${y} Q300 ${y+16+i} 364 ${y}" stroke="#d29a4c" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".9"/>`).join('')}
+  <ellipse cx="280" cy="420" rx="14" ry="60" fill="#fff" opacity=".18"/></g>`;
+ const torso=`<g class="part" data-part="torso"><g class="shape">${sk('path',DEF.torso.a)}${belly}
+   <g clip-path="url(#clip-torso)"><ellipse cx="300" cy="312" rx="66" ry="16" fill="#5a1000" opacity=".3" filter="url(#blur6)"/><ellipse cx="236" cy="470" rx="14" ry="90" fill="#fff" opacity=".1"/></g></g>
    <g class="dmg" clip-path="url(#clip-torso)">${overlays('torso',DEF.torso.c)}</g></g>`;
 
  const spikes=`<g class="spikes" id="spikes" style="opacity:0;transform:scale(.2)">
-   <path d="M240 152 L234 98 L276 138Z M360 152 L366 98 L324 138Z M284 132 L300 66 L316 132Z" fill="url(#gSpike)" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/></g>`;
+   <path d="M262 124 L252 74 L290 112Z M338 124 L348 74 L310 112Z M288 112 L300 50 L312 112Z" fill="url(#gSpike)" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round"/></g>`;
+ const horn=`<path d="M262 128 C236 102 196 88 150 74 C164 100 188 134 220 160Z" fill="url(#gHorn)" stroke="${OUT}" stroke-width="3.6" stroke-linejoin="round"/>
+   <path d="M246 126 C216 104 182 90 152 78" stroke="#fff" stroke-width="3" fill="none" opacity=".3" stroke-linecap="round"/>
+   <path d="M228 128 C206 118 190 110 172 100" stroke="#8a2d0c" stroke-width="2" fill="none" opacity=".3"/>`;
+ const frills=`<path d="M190 236 L148 226 L186 262Z M194 268 L158 280 L202 296Z" fill="url(#gHorn)" stroke="${OUT}" stroke-width="3.2" stroke-linejoin="round"/>`;
  const head=`<g class="part" data-part="head">${spikes}<g class="shape">
-   ${sk('ellipse',DEF.head.a)}
-   <ellipse cx="262" cy="170" rx="44" ry="20" fill="#fff" opacity=".16" transform="rotate(-18 262 170)"/>
-   ${sk('ellipse','cx="300" cy="284" rx="64" ry="40"','url(#gSkinL)')}
-   <ellipse class="nostril" cx="281" cy="272" rx="4.5" ry="3.2" fill="#6a1a05"/><ellipse class="nostril" cx="319" cy="272" rx="4.5" ry="3.2" fill="#6a1a05"/>
-   <g id="cheeks"><circle cx="214" cy="270" r="15" fill="#ff5a5a" opacity=".38" filter="url(#blur3)"/><circle cx="386" cy="270" r="15" fill="#ff5a5a" opacity=".38" filter="url(#blur3)"/></g>
+   ${horn}${mirror(horn)}${frills}${mirror(frills)}
+   ${sk('path',DEF.head.a)}
+   <ellipse cx="252" cy="152" rx="46" ry="18" fill="#fff" opacity=".16" transform="rotate(-18 252 152)"/>
+   <path d="M232 160 Q246 150 262 156 M338 156 Q354 150 368 160" stroke="#8a2d0c" stroke-width="2.2" fill="none" opacity=".25" stroke-linecap="round"/>
+   ${sk('ellipse','cx="300" cy="262" rx="74" ry="46"','url(#gSkinL)')}
+   <ellipse cx="274" cy="238" rx="22" ry="8" fill="#fff" opacity=".18" transform="rotate(-10 274 238)"/>
+   <ellipse class="nostril" cx="284" cy="244" rx="4.6" ry="3.2" fill="#6a1a05"/><ellipse class="nostril" cx="316" cy="244" rx="4.6" ry="3.2" fill="#6a1a05"/>
+   <g id="cheeks"><circle cx="208" cy="262" r="15" fill="#ff5a5a" opacity=".34" filter="url(#blur3)"/><circle cx="392" cy="262" r="15" fill="#ff5a5a" opacity=".34" filter="url(#blur3)"/></g>
 </g><g class="dmg" clip-path="url(#clip-head)">${overlays('head',DEF.head.c)}</g><g class="shape">
-   <path id="mouthFill" d="" fill="#5a1008" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round" opacity="0"/>
+   <path id="mouthFill" d="" fill="#5a1008" stroke="${OUT}" stroke-width="3.5" stroke-linejoin="round" opacity="1"/>
+   <g clip-path="url(#mouthClip)"><ellipse id="tongue" cx="300" cy="298" rx="30" ry="14" fill="#f27a8c" stroke="#b8445a" stroke-width="2"/><path id="tongueLine" d="M300 288 L300 304" stroke="#b8445a" stroke-width="2" opacity=".6"/></g>
    <g id="teeth"></g>
    <path id="mouthLine" d="" fill="none" stroke="${OUT}" stroke-width="4.5" stroke-linecap="round"/>
    ${eye()}${mirror(eye())}
-   <g class="steam" id="steam"><circle cx="280" cy="262" r="9" fill="#fff"/><circle cx="320" cy="262" r="9" fill="#fff"/><circle cx="276" cy="262" r="7" fill="#fff"/><circle cx="324" cy="262" r="7" fill="#fff"/></g>
+   <g class="steam" id="steam"><circle cx="284" cy="240" r="9" fill="#fff"/><circle cx="316" cy="240" r="9" fill="#fff"/><circle cx="280" cy="240" r="7" fill="#fff"/><circle cx="320" cy="240" r="7" fill="#fff"/></g>
   </g></g>`;
 
  const wings=sidePart('wing','L')+sidePart('wing','R');
@@ -312,7 +339,7 @@ function buildSVG(){
  const hands=sidePart('hand','L')+sidePart('hand','R');
 
  $('#svg').innerHTML=defs+`<ellipse cx="300" cy="662" rx="170" ry="20" fill="url(#gGround)"/>
-  <g id="recoil"><g id="dino">${wings}${tail}${flame}${torso}${legs}${feet}${arms}${hands}${head}</g></g>`;
+  <g id="recoil"><g id="dino">${wings}${tail}${torso}${legs}${feet}${arms}${hands}${head}</g></g>`;
 }
 
 /* ---------- Textura de escamas (canvas → pattern) ---------- */
@@ -347,28 +374,29 @@ function updatePart(k){
 function updateFace(){
  const A=anger();
  document.documentElement.style.setProperty('--anger',A.toFixed(3));$('#vig').style.opacity=A;
- const yOut=196+6*A,yIn=196+44*A;
- $$('.lid').forEach(l=>l.setAttribute('points',`212,170 296,170 296,${yIn} 212,${yOut}`));
- $$('.brow').forEach(b=>{b.setAttribute('d',`M212 ${yOut-9} Q250 ${(yOut+yIn)/2-15} 294 ${yIn-8}`);b.setAttribute('stroke-width',3+7*A);b.setAttribute('opacity',clamp(A*1.6))});
- $$('.iris').forEach(i=>i.setAttribute('fill',mix('#2aa6c9','#e0200f',clamp(A*1.3))));
- $$('.sclera').forEach(s=>s.setAttribute('fill',mix('#ffffff','#ffd2c2',A)));
- $$('.pupil').forEach(p=>{p.setAttribute('rx',9-4*A);p.setAttribute('ry',10-1*A)});
- $$('.hl').forEach(h=>h.style.opacity=1-A*.85);
+ const yOut=170+5*A,yIn=170+56*A;
+ $$('.lid').forEach(l=>l.setAttribute('points',`208,160 296,160 296,${yIn} 208,${yOut}`));
+ $$('.brow').forEach(b=>{b.setAttribute('d',`M210 ${yOut-8} Q246 ${(yOut+yIn)/2-14} 294 ${yIn-7}`);b.setAttribute('stroke-width',3+7*A);b.setAttribute('opacity',clamp(A*1.6))});
+ $$('.iris').forEach(i=>i.setAttribute('fill',mix('#8a4a1a','#e0200f',clamp(A*1.3))));
+ $$('.sclera').forEach(s=>s.setAttribute('fill',mix('#1c0b06','#5a0c04',A)));
+ $$('.pupil').forEach(p=>{p.setAttribute('rx',11-5*A);p.setAttribute('ry',12-1.5*A)});
+ $$('.hl').forEach(h=>h.style.opacity=1-A*.8);
  $('#cheeks').style.opacity=1-A;
- // boca
- const y0=290+14*A,yc=324-56*A,x0=262,x1=338,open=A>.3;
- $('#mouthLine').setAttribute('d',`M${x0} ${y0} Q300 ${yc} ${x1} ${y0}`);
- const k=clamp((A-.3)/.7),yb=yc+10+40*k;
- $('#mouthFill').setAttribute('d',`M${x0} ${y0} Q300 ${yc} ${x1} ${y0} Q300 ${yb} ${x0} ${y0}Z`);
- $('#mouthFill').style.opacity=open?1:0;
+ // boca (siempre abierta: sonrisa con lengua → rugido con colmillos)
+ const x0=250,x1=350,y0=272+12*A,yc=308-62*A,k=clamp((A-.3)/.7),yb=yc+36+34*k;
+ const mt=`M${x0} ${y0} Q300 ${yc} ${x1} ${y0}`,md=`${mt} Q300 ${yb} ${x0} ${y0}Z`;
+ $('#mouthLine').setAttribute('d',mt);$('#mouthFill').setAttribute('d',md);$('#mouthClipP').setAttribute('d',md);
+ const midT=(y0+yc)/2,midB=(y0+yb)/2;
+ $('#tongue').setAttribute('cy',midB-6);$('#tongue').setAttribute('ry',6+8*(1-A*.4));$('#tongue').style.opacity=clamp(1.25-A*1.3);$('#tongueLine').style.opacity=clamp(1.25-A*1.3)*.6;
  const q=(t,a,b,c)=>(1-t)*(1-t)*a+2*t*(1-t)*b+t*t*c;
  let teeth='';
- if(open)for(const t of [.2,.35,.5,.65,.8]){const x=q(t,x0,300,x1),y=q(t,y0,yc,y0),h=5+10*k;teeth+=`<path d="M${x-5} ${y} L${x} ${y+h} L${x+5} ${y}Z" fill="#fff" stroke="${OUT}" stroke-width="1.6" stroke-linejoin="round"/>`}
+ const tt=A<.3?[.27,.73]:[.15,.3,.45,.6,.75,.88];
+ for(const t of tt){const x=q(t,x0,300,x1),y=q(t,y0,yc,y0),h=(A<.3?6:7)+11*k;teeth+=`<path d="M${x-5} ${y-.5} L${x} ${y+h} L${x+5} ${y-.5}Z" fill="#fff" stroke="${OUT}" stroke-width="1.6" stroke-linejoin="round"/>`}
  $('#teeth').innerHTML=teeth;
  // extras
  const sp=$('#spikes');sp.style.opacity=clamp((A-.25)*2);sp.style.transform=`scale(${.2+clamp((A-.25)*1.6)*.9})`;
  $('#steam').style.opacity=clamp((A-.4)*2.5);
- const fs=1+A*.9;$('#flameScale').style.transform=`scale(${fs})`;
+ const fs=1+A*.55;$('#flameScale').style.transform=`scale(${fs})`;
  $('#flameOut').setAttribute('fill',mix('#ff8a1f','#ff2a0a',A));$('#flameIn').setAttribute('fill',mix('#ffe066','#ffb020',A));
  $('#flameGlow').setAttribute('fill',mix('#ff7a1a','#ff2a0a',A));
  // músculo
